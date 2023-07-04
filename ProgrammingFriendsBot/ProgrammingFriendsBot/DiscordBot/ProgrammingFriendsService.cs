@@ -1,14 +1,23 @@
 ﻿using DSharpPlus;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using ProgrammingFriendsBot.Common.Options;
 
 namespace ProgrammingFriendsBot.DiscordBot;
 
 internal class ProgrammingFriendsService : IHostedService
 {
+    private readonly ProgrammingFriendsBotOptions _options;
+
+    public ProgrammingFriendsService(IOptions<ProgrammingFriendsBotOptions> options)
+    {
+        _options = options.Value;
+    }
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var discord = new DiscordClient(new DiscordConfiguration() {
-            Token = "TOKENHEREFORNOW",
+            Token = _options.Token,
             TokenType = TokenType.Bot,
             Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
         });
