@@ -85,7 +85,7 @@ internal class ProgrammingFriendsService : IHostedService
 
             if (generalChannel is not null)
             {
-                await generalChannel.SendMessageAsync($"Everyone please welcome {e.Member.Nickname}!");
+                await generalChannel.SendMessageAsync($"Everyone please welcome {e.Member.DisplayName}!");
             }
         };
     }
