@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ProgrammingFriendsBot.Common.Options;
 using System.Text;
@@ -9,10 +10,13 @@ namespace ProgrammingFriendsBot.DiscordBot;
 internal class ProgrammingFriendsService : IHostedService
 {
     private readonly ProgrammingFriendsBotOptions _options;
+    private readonly ILogger<ProgrammingFriendsService> _logger;
 
-    public ProgrammingFriendsService(IOptions<ProgrammingFriendsBotOptions> options)
+    public ProgrammingFriendsService(IOptions<ProgrammingFriendsBotOptions> options,
+        ILogger<ProgrammingFriendsService> logger)
     {
         _options = options.Value;
+        _logger = logger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -20,10 +24,12 @@ internal class ProgrammingFriendsService : IHostedService
         var discord = new DiscordClient(new DiscordConfiguration() {
             Token = _options.Token,
             TokenType = TokenType.Bot,
-            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
+            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents | DiscordIntents.GuildMembers
         });
 
         discord.GuildMemberAdded += async (s, e) => {
+            _logger.LogDebug("User joined: {displayName}", e.Member.DisplayName);
+
             var programmersRole = e.Guild.Roles
                 .Where(r => r.Value.Name == "Programmers")
                 .Select(r => r.Value)
