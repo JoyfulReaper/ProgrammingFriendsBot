@@ -17,8 +17,8 @@ internal class ProgrammingFriendsService : IHostedService
 {
     private readonly ProgrammingFriendsBotOptions _options;
     private readonly ILogger<ProgrammingFriendsService> _logger;
-    public CommandsNextExtension _commands;
-    public SlashCommandsExtension _slashCommands;
+    private CommandsNextExtension _commands;
+    private SlashCommandsExtension _slashCommands;
 
     public ProgrammingFriendsService(IOptions<ProgrammingFriendsBotOptions> options,
         ILogger<ProgrammingFriendsService> logger)
@@ -47,13 +47,13 @@ internal class ProgrammingFriendsService : IHostedService
 
         };
 
-       _commands = discord.UseCommandsNext(commandConfig);
-        _slashCommands = discord.UseSlashCommands();
+        _commands = discord.UseCommandsNext(commandConfig);
         _commands.RegisterCommands<Commands>();
+
+        _slashCommands = discord.UseSlashCommands();
         _slashCommands.RegisterCommands<SlashCommands>();
 
         
-
         await discord.ConnectAsync();
     }
 

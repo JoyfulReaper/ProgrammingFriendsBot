@@ -7,7 +7,7 @@ namespace ProgrammingFriendsBot.AllSlashCommands;
 
 public class SlashCommands : ApplicationCommandModule
 {
-    [SlashCommand("title here", "description here")]
+    [SlashCommand("titlehere", "description here")]
     public async Task TestCommand(InteractionContext ctx)
     {
         // if you want to give a user options to select
